@@ -119,7 +119,7 @@
 
 {%- set listen_ports = {} %}
 {%- if server.site is defined %}
-{%-   for site_name, site in server.site.iteritems() %}
+{%-   for site_name, site in server.site.items() %}
 {#      TODO: move away from managing listen in ports.conf, instead add this directive #}
 {#      to specific service config. Currently it conflits with horizon formula, that manage #}
 {#      port.conf by theirown, it leads to races when applying horizon/apache states. #}
@@ -131,5 +131,10 @@
 {%-         do listen_ports.update( { '127.0.0.1:80': true } ) %}
 {%-       endif %}
 {%-     endif %}
+{%-   endfor %}
+{%- endif %}
+{%- if server.bind.ports is defined %}
+{%-   for port in server.bind.ports %}
+{%-     do listen_ports.update({port: true}) %}
 {%-   endfor %}
 {%- endif %}

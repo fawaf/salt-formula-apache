@@ -1,7 +1,7 @@
 {%- from "apache/map.jinja" import server, listen_ports with context -%}
 iptables:
   rules:
-{%- for port in listen_ports.iterkeys() %}
+{%- for port in listen_ports.keys() %}
     - destination_port: {{ port }}
       protocol: tcp
       jump: ACCEPT

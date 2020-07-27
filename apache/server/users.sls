@@ -1,7 +1,7 @@
 {%- from "apache/map.jinja" import server with context %}
 {%- if server.enabled %}
 
-{%- for user_name, user in server.get('user', {}).iteritems() %}
+{%- for user_name, user in server.get('user', {}).items() %}
 {%- if user.enabled %}
 
 apache_setup_user_{{ user_name }}:

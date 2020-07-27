@@ -90,7 +90,7 @@ apache_{{ module }}_enable:
 
 {%- if server.mods is defined %}
 
-{%- for _module, _params in server.mods.iteritems() %}
+{%- for _module, _params in server.mods.items() %}
 
   {%- if _params.enabled == true %}
     {%- if _params.status == 'enabled' %}

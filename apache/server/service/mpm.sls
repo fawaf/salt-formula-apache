@@ -3,7 +3,7 @@
 
 {%- if grains.os_family == 'Debian' %}
 
-{%- for mpm_type, mpm in server.mpm.iteritems() %}
+{%- for mpm_type, mpm in server.mpm.items() %}
 
 {%- if mpm_type == server.get('default_mpm', 'prefork') %}
 
@@ -13,7 +13,7 @@ apache_mpm_{{ mpm_type }}_enable:
   - creates: /etc/apache2/mods-enabled/mpm_{{ mpm_type }}.load
   - require:
     - file: apache_mpm_{{ mpm_type }}_config
-    {%- for mpm_name, dummy in server.mpm.iteritems() if mpm_name != mpm_type %}
+    {%- for mpm_name, dummy in server.mpm.items() if mpm_name != mpm_type %}
     - file: apache_mpm_{{ mpm_name }}_disable
     {%- endfor %}
   - watch_in:

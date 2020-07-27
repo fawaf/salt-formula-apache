@@ -13,7 +13,7 @@ doc:
           value: "unknown"
           {%- endif %}
       endpoint:
-  {%- for site_name, site in server.get('site', {}).iteritems() %}
+  {%- for site_name, site in server.get('site', {}).items() %}
   {%- if site.enabled %}
         {{ site_name }}_{{ site.type }}:
           name: {{ site_name }}

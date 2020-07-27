@@ -1,5 +1,5 @@
 {%- set robots = salt['pillar.get']('apache:server:robots:'+robots_name) -%}
-{%- for robot, opts in robots.iteritems() -%}
+{%- for robot, opts in robots.items() -%}
 User-agent: {% if robot == 'all' %}*{% else %}{{ robot }}{% endif %}
 {%- if opts.disallow %}
 {%- for path in opts.disallow %}

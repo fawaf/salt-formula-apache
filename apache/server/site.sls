@@ -4,7 +4,7 @@
 {%- if server.site is defined %}
 {%- set ssl_certificates = {} %}
 
-{%- for site_name, site in server.site.iteritems() %}
+{%- for site_name, site in server.site.items() %}
 
 {% if site.enabled or site.get('available', False) %}
 
@@ -92,8 +92,9 @@ apache_generate_{{ site_name }}_ticket_key:
       allowed_cert_dns: {{ site.auth.cert.allowed_cert_dns }}
 {%- endif %}
 
-{%- if site.get('ssl', {'enabled': False}).enabled and site.ssl.get('install_cert', true) and site.host.name not in ssl_certificates.keys() %}
-  {%- if 'key_file' not in site.get('ssl') %}
+{%- if site.ssl.engine != 'letsencrypt' %}
+  {%- if site.get('ssl', {'enabled': False}).enabled and site.ssl.get('install_cert', true) and site.host.name not in ssl_certificates.keys() %}
+    {%- if 'key_file' not in site.get('ssl') %}
 {%- set _dummy = ssl_certificates.update({site.host.name: []}) %}
 
 /etc/ssl/certs/{{ site.host.name }}.crt:
@@ -150,6 +151,8 @@ apache_generate_{{ site_name }}_ticket_key:
     - require_in:
       - file: /etc/apache2/sites-enabled/{{ site.type }}_{{ site.name }}{{ server.conf_ext }}
     {%- endif %}
+{%- endif %}
+
 {%- endif %}
 
 {%- endif %}

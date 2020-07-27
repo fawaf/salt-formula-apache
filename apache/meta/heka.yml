@@ -2,7 +2,7 @@
 
 {# Build a dict of Apache sites we are interested in #}
 {%- set apache_sites = {} %}
-{%- for site_name, site in server.get('site', {}).iteritems() if server.get('enabled', True) %}
+{%- for site_name, site in server.get('site', {}).items() if server.get('enabled', True) %}
 {%- if site.type == 'keystone' %}
 {%- do apache_sites.update({site_name: site}) %}
 {%- endif %}
@@ -11,7 +11,7 @@
 {%- if apache_sites|list|length > 0 %}
 log_collector:
   decoder:
-{%- for site_name, site in apache_sites.iteritems() %}
+{%- for site_name, site in apache_sites.items() %}
 {%- if site.type == 'keystone' %}
     keystone_wsgi:
       engine: sandbox
@@ -25,7 +25,7 @@ log_collector:
 {%- endfor %}
 
   input:
-{%- for site_name, site in apache_sites.iteritems() %}
+{%- for site_name, site in apache_sites.items() %}
 {%- if site.type == 'keystone' %}
 {%- set apache_log_file = site.get('log', {}).get('custom', {}).file|default(server.log_dir ~ '/' ~ site_name ~ '.access.log') %}
     keystone_wsgi_log:
