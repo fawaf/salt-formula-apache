@@ -62,7 +62,27 @@ apache_httpd_ssl_config_enable:
     {%- endif %}
   {%- endif %}
 
+apache_httpd_config:
+  file.managed:
+  - name: {{ server.root_conf_file }}
+  - source: salt://apache/files/httpd.conf
+  - template: jinja
+  - require:
+    - pkg: apache_packages
+  - watch_in:
+    - service: apache_service
+
 {%- if grains.os_family == "Debian" %}
+/etc/apache2/conf-enabled/ports.conf:
+  file.symlink:
+  - target: {{ server.conf_dir }}/ports.conf
+  - require:
+    - file: {{ server.conf_dir }}/ports.conf
+  {% if not grains.get('noservices', False) %}
+  - watch_in:
+    - service: apache_service
+  {% endif %}
+
 /etc/apache2/conf-enabled/security.conf:
   file.symlink:
   - target: {{ server.conf_dir }}/security.conf
@@ -81,16 +101,6 @@ apache_httpd_ssl_config_enable:
 {%   endif %}
 
 {%- elif grains.os_family == "RedHat" %}
-apache_httpd_config:
-  file.managed:
-  - name: /etc/httpd/conf/httpd.conf
-  - source: salt://apache/files/httpd.conf
-  - template: jinja
-  - require:
-    - pkg: apache_packages
-  - watch_in:
-    - service: apache_service
-
 apache_conf_d_ssl_config:
   file.managed:
   - name: /etc/httpd/conf.d/ssl.conf
@@ -130,3 +140,10 @@ apache_remove_packages:
     - service: apache_service_dead
 
 {%- endif %}
+
+{% for type in ['access', 'error'] %}
+{{ type }}_log_file:
+  file.touch:
+  - name: {{ server.log_dir }}/{{ type }}.log
+  - makedirs: true
+{% endfor %}

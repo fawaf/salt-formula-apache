@@ -22,7 +22,9 @@
           'start_period': '1',
           'end_period': '3600',
         },
-        'enabled': false
+        'enabled': false,
+        'root_conf_file': '/etc/apache2/apache2.conf',
+        'server_root': '/etc/apache2'
     },
     'Arch': {
         'pkgs': ['apache', 'openssl'],
@@ -37,7 +39,9 @@
         'www_dir': '/var/www',
         'service_user': 'apache',
         'service_group': 'apache',
-        'enabled': false
+        'enabled': false,
+        'root_conf_file': '/etc/httpd/conf/httpd.conf',
+        'server_root': '/etc/httpd'
     },
     'RedHat': {
         'pkgs': ['httpd', 'openssl'],
@@ -52,7 +56,9 @@
         'www_dir': '/var/www',
         'service_user': 'apache',
         'service_group': 'apache',
-        'enabled': false
+        'enabled': false,
+        'root_conf_file': '/etc/httpd/conf/httpd.conf',
+        'server_root': '/etc/httpd'
     },
     'FreeBSD': {
         'pkgs': ['apache22', 'openssl'],
@@ -66,7 +72,9 @@
         'www_dir': '/usr/local/www/apache22/',
         'service_user': 'apache',
         'service_group': 'apache',
-        'enabled': false
+        'enabled': false,
+        'root_conf_file': '/etc/httpd/conf/httpd.conf',
+        'server_root': '/etc/httpd'
     },
 }, merge=salt['grains.filter_by']({
     'trusty': {

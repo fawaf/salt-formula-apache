@@ -5,6 +5,21 @@
 {%- set ssl_certificates = {} %}
 
 {%- for site_name, site in server.site.items() %}
+{{ site.name }}_log_dir:
+  file.directory:
+  - name: {{ server.log_dir }}/{{ site_name }}
+  - user: {{ server.service_user }}
+  - group: {{ server.service_group }}
+  - makedirs: true
+
+{% for type in ['access', 'error'] %}
+{{ site.name }}_{{ type }}_log_file:
+  file.touch:
+  - name: {{ server.log_dir }}/{{ site_name }}/{{ type }}.log
+  - makedirs: true
+  - watch_in:
+    - service: apache_service
+{% endfor %}
 
 {% if site.enabled or site.get('available', False) %}
 
